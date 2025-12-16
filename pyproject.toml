@@ -1,0 +1,22 @@
+[project]
+name = "imagen-cli"
+version = "0.6.0"
+description = "CLI tool for generating and editing images using Google's Gemini Image models (Nano Banana) via Gemini API"
+authors = [{name = "Orlando Bruno"}]
+requires-python = ">=3.11"
+dependencies = [
+    "google-genai>=0.3.0",
+    "pillow>=10.0.0",
+    "click>=8.1.0",
+    "python-dotenv>=1.0.0",
+]
+
+[project.scripts]
+genimg = "imagen_cli.main:cli"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv]
+dev-dependencies = []
