@@ -52,7 +52,7 @@ ASPECT_RATIOS = {
 }
 
 
-def get_api_key():
+def get_api_key() -> str:
     """Get Google AI API key from environment."""
     api_key = os.getenv("GOOGLE_AI_API_KEY") or os.getenv("GOOGLE_API_KEY")
     if not api_key:
@@ -80,7 +80,7 @@ def get_api_key():
     return api_key
 
 
-def detect_project_context():
+def detect_project_context() -> Path:
     """Detect if we're in a known project and suggest appropriate save location."""
     cwd = Path.cwd()
 
@@ -100,7 +100,7 @@ def detect_project_context():
     return cwd
 
 
-def generate_filename(prompt, extension="png", has_reference=False):
+def generate_filename(prompt: str, extension: str = "png", has_reference: bool = False) -> str:
     """Generate a filename based on prompt and timestamp."""
     # Take first few words of prompt, clean them up
     words = prompt.lower().split()[:4]
@@ -118,7 +118,7 @@ def generate_filename(prompt, extension="png", has_reference=False):
     return f"{prefix}_{prompt_slug}_{timestamp}.{extension}"
 
 
-def ask_save_location(suggested_path):
+def ask_save_location(suggested_path: Path) -> Path:
     """Interactive prompt for save location."""
     click.echo(f"\nSuggested location: {suggested_path}")
     response = click.prompt(
@@ -136,7 +136,14 @@ def ask_save_location(suggested_path):
         return Path(response)
 
 
-def generate_metadata_file(image_path, prompt, model_name, aspect_ratio, size, reference_images):
+def generate_metadata_file(
+    image_path: Path,
+    prompt: str,
+    model_name: str,
+    aspect_ratio: str,
+    size: str,
+    reference_images: tuple[str, ...]
+) -> Path | None:
     """Generate accessibility metadata file for the image."""
     metadata_path = image_path.parent / f"{image_path.stem}-metadata.md"
 
@@ -281,7 +288,20 @@ A generated image based on the prompt: "{prompt}". Created using Google Gemini I
     is_flag=True,
     help="Show version and exit",
 )
-def cli(prompt, output, reference_images, edit_mode, model, ask, aspect_ratio, size, person_generation, no_people, list_models, version):
+def cli(
+    prompt: str | None,
+    output: str | None,
+    reference_images: tuple[str, ...],
+    edit_mode: str,
+    model: str,
+    ask: bool,
+    aspect_ratio: str,
+    size: str,
+    person_generation: str,
+    no_people: bool,
+    list_models: bool,
+    version: bool
+) -> None:
     """
     Generate and edit images using Google's Gemini Image models (Nano Banana).
 
